@@ -9,119 +9,40 @@
 <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
 <script type="text/babel">
-    const root = document.getElementById("root");
-
-    const MTH = () => {
-        const [amount, setAmount] = React.useState(0);
-        const onChange = (event)=> {
-            setAmount(event.target.value);
-        };
-
-        const reset = ()=> setAmount(0);
-
-        const [flipped, setFlipped] = React.useState(false);
-        const onFlip = () => {
-            reset();
-            setFlipped((current) => !current);
-        }
+    const Btn = ({text , onClick, fontSize}) => {
+        console.log(text, "render")
         return (
-            <div> 
-                <div>
-                    <label htmlFor="minutes">Minutes</label>
-                    <input
-                        value={flipped ? amount*60 : amount}
-                        id="minutes"
-                        placeholder="Minutes" 
-                        type="number" 
-                        onChange={onChange}
-                        disabled={flipped}
-                        />
-                    <h4>{amount}</h4>
-                </div>
-                <div>
-                    <label htmlFor="hours">Hours</label>
-                    <input 
-                        value={flipped ? amount :  Math.round(amount / 60)} 
-                        id="hours" 
-                        placeholder="Hours" 
-                        type="number" 
-                        disabled={!flipped}
-                        onChange={onChange}
-                        />
-                </div>
-                <button onClick={reset}>Reset</button>
-                <button onClick={onFlip}>{flipped? "Turn back":"Flip"}</button>
-            </div>
-        );
-    };
-    const CTF = () => {
-        const [amount, setAmount] = React.useState(0);
-        const onChange = (event)=> {
-            setAmount(event.target.value);
-        };
-
-        const reset = ()=> setAmount(0);
-
-        const [flipped, setFlipped] = React.useState(false);
-        const onFlip = () => {
-            reset();
-            setFlipped((current) => !current);
-        }
-        return (
-            <div>
-                <h3>cm to ft</h3>
-                <div>
-                    <label htmlFor="centimetre">cm</label>
-                    <input
-                        value={flipped ? (amount/0.032808).toFixed(2) : amount}
-                        id="cm"
-                        placeholder="cm" 
-                        type="number" 
-                        onChange={onChange}
-                        disabled={flipped}
-                        />
-                </div>
-                <div>
-                    <label htmlFor="ft">ft</label>
-                    <input 
-                        value={flipped ? amount :  (amount*0.032808).toFixed(2)} 
-                        id="ft" 
-                        placeholder="ft" 
-                        type="number" 
-                        disabled={!flipped}
-                        onChange={onChange}
-                        />
-                </div>
-                <button onClick={reset}>Reset</button>
-                <button onClick={onFlip}>{flipped? "Turn back":"Flip"}</button>
-                
-                
-           
-            </div>
+            <button onClick={onClick}
+                style={{
+                    backgroundColor: "tomato",
+                    padding: "10px 20px",
+                    border: 0,
+                    borderRadius: 10,
+                    fontSize: fontSize,
+                }}>{text}</button>
         )
-    };
+    }
+    const Memorize = React.memo(Btn)
 
+    Memorize.propTypes = {
+        text: PropTypes.string.isRequired,
+        fontSize: PropTypes.number.isRequired,
+
+    }
     const App = () => {
-        const [index, setIndex] = React.useState("0");
-        const onSelect = (event) => {
-            setIndex(event.target.value);
-        }
-
+        const [value, setValue] = React.useState("Save");
+        const changeValue = () => setValue("Revert")
         return (
             <div>
-                <h1 className="hi">Super Converter</h1>
-                <select value={index} onChange={onSelect}>
-                    <option value="1">Minutes & Hours</option>
-                    <option value="2">Cm & Ft</option>
-                </select>
-                <hr />
-                {index === "0" ? "please select your units" : null}
-                {index === "1" ? <MTH /> : null }
-                {index === "2" ? <CTF /> : null }
+                <Memorize text={value} onClick={changeValue} fontSize={18}/>
+                <Memorize text="Continue" fontSize={"s"}/>
+                <Memorize text={33} />
             </div>
         );
     };
+    const root = document.getElementById("root");
     ReactDOM.render(<App />, root);
 
 </script>
